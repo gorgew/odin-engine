@@ -11,3 +11,7 @@ create_window :: proc(width: i32, height: i32) -> Window {
     rl.SetTargetFPS(60)
     return Window{width, height}
 }
+
+close_window:: proc(window: ^Window) {
+    rl.CloseWindow();
+}
