@@ -1,4 +1,5 @@
 package main
+import rl "vendor:raylib"
 
 State :: enum {
     Start,
@@ -26,5 +27,12 @@ initState :: proc() {
 }
 
 drawState :: proc() {
+    rl.BeginDrawing()
+    defer rl.EndDrawing()
+
     top_state_table[top_state].draw()
+    ui_begin()
+    all_windows(get_ui_ctx())
+    ui_end()
+    render_ui()
 }

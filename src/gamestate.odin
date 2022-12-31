@@ -11,6 +11,7 @@ GameStateProc :: struct {
     enter: proc(^GameState),
     exit: proc(^GameState),
     draw: proc(),
+    add_ui: proc(),
 }
 
 @(private)
@@ -42,13 +43,10 @@ exitExploreDungeon :: proc(^State) {
 
 pos := rl.Vector2{10, 10}
 drawExploreDungeon :: proc() {
-    rl.BeginDrawing();
 
-    rl.ClearBackground(rl.RAYWHITE);
-
+    //rl.ClearBackground(rl.RAYWHITE)
     rl.DrawText("Congrats! You created your first window!", 190, 200, 20, rl.LIGHTGRAY)
     rl.DrawCircleV(pos, 20.0, rl.MAGENTA)
-    rl.EndDrawing();
 }
 
 initGameState :: proc() {
