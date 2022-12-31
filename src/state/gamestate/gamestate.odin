@@ -1,7 +1,7 @@
-package main
+package gamestate
 
 import rl "vendor:raylib"
-
+import "../"
 GameState :: enum {
     ExploreDungeon,
     Combat,
@@ -15,29 +15,29 @@ GameStateProc :: struct {
 }
 
 @(private)
-game_state_table := [len(GameState)]StateProc{}
+game_state_table := [len(GameState)]state.StateProc{}
 
 @(private)
 game_state := GameState.ExploreDungeon
 
-enterGameState :: proc(state : ^State) {
+enter :: proc(state : ^state.State) {
     game_state = GameState.ExploreDungeon
     game_state_table[game_state].enter(state)
 }
 
-exitGameState :: proc(^State) {
+exit :: proc(^state.State) {
 
 }
 
-drawGameState :: proc() {
+draw :: proc() {
     game_state_table[game_state].draw()
 }
 
-enterExploreDungeon :: proc(^State) {
+enterExploreDungeon :: proc(^state.State) {
 
 }
 
-exitExploreDungeon :: proc(^State) {
+exitExploreDungeon :: proc(^state.State) {
 
 }
 
@@ -49,8 +49,8 @@ drawExploreDungeon :: proc() {
     rl.DrawCircleV(pos, 20.0, rl.MAGENTA)
 }
 
-initGameState :: proc() {
-    top_state_table[State.Game] = {enterGameState, exitGameState, drawGameState}
+init :: proc() {
+    state.top_state_table[state.State.Game] = {enter, exit, draw}
 
     game_state_table[GameState.ExploreDungeon] = {enterExploreDungeon, exitExploreDungeon, drawExploreDungeon}
 }

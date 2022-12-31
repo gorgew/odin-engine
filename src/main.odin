@@ -1,20 +1,18 @@
 package main
 
 import rl "vendor:raylib"
+import "./ui"
+import "./state"
 import "core:fmt"
 
 main :: proc() {
-    window := create_window(screenWidth, screenHeight)
-    defer close_window(&window)
-
-    load_ui()
-    defer close_ui()
-
-    initGameState()
     
+    load_systems()
+    defer close_systems()
+
     for !rl.WindowShouldClose()
     {
-        get_ui_input()
-        drawState()
+        ui.get_input()
+        state.draw()
     }
 }

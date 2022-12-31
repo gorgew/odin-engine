@@ -1,5 +1,6 @@
-package main
+package state
 import rl "vendor:raylib"
+import ui "../ui"
 
 State :: enum {
     Start,
@@ -14,25 +15,26 @@ StateProc :: struct {
 }
 
 //Top level state transition table
-@(private)
+
 top_state_table := [len(State)]StateProc{}
 
 //Top level state
 @(private)
 top_state := State.Game
 
-initState :: proc() {
-    initGameState()
+init :: proc() {
     top_state_table[top_state].enter(&top_state)
 }
 
-drawState :: proc() {
+draw :: proc() {
     rl.BeginDrawing()
+    @static bg_color := rl.BLUE
+    rl.ClearBackground(bg_color)
     defer rl.EndDrawing()
 
     top_state_table[top_state].draw()
-    ui_begin()
-    all_windows(get_ui_ctx())
-    ui_end()
-    render_ui()
+    ui.begin()
+    ui.all_windows(ui.get_ctx())
+    ui.end()
+    ui.render()
 }

@@ -1,5 +1,5 @@
 //Adapted from Ginger Bill: https://gist.github.com/gingerBill/c7a91318bd7b3be96d63d428b24d19ea
-package main
+package ui
 
 import "core:fmt"
 import "core:unicode/utf8"
@@ -52,7 +52,7 @@ load_context :: proc() {
 	ctx.text_height = mu.default_atlas_text_height
 }
 
-load_ui :: proc() {
+load :: proc() {
     set_pixel_alpha()
     load_mu_tex()
 
@@ -60,20 +60,20 @@ load_ui :: proc() {
     load_context()
 }
 
-close_ui :: proc() {
+close :: proc() {
     delete(pixels)
     rl.UnloadTexture(state.atlas_texture)
 }
 
-ui_begin :: proc() {
+begin :: proc() {
     mu.begin(ctx)
 }
 
-ui_end :: proc() {
+end :: proc() {
     mu.end(ctx)
 }
 
-get_ui_input :: proc() {
+get_input :: proc() {
     { // text input
         text_input: [512]byte = ---
         text_input_offset := 0
@@ -136,11 +136,11 @@ get_ui_input :: proc() {
     }
 }
 
-get_ui_ctx :: proc() -> ^mu.Context {
+get_ctx :: proc() -> ^mu.Context {
     return ctx
 }
 
-render_ui :: proc() {
+render :: proc() {
     render_texture :: proc(rect: mu.Rect, pos: [2]i32, color: mu.Color) {
         source := rl.Rectangle{f32(rect.x), f32(rect.y), f32(rect.w), f32(rect.h)}
         position := rl.Vector2{f32(pos.x), f32(pos.y)}
@@ -148,7 +148,7 @@ render_ui :: proc() {
         rl.DrawTextureRec(state.atlas_texture, source, position, transmute(rl.Color)color)
     }
 
-    rl.ClearBackground(transmute(rl.Color)state.bg)
+    //rl.ClearBackground(transmute(rl.Color)state.bg)
 
     command_backing: ^mu.Command
     for variant in mu.next_command_iterator(ctx, &command_backing) {

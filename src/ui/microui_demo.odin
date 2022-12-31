@@ -1,4 +1,4 @@
-package main
+package ui
 import "core:fmt"
 import mu "vendor:microui"
 

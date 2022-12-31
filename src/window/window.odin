@@ -1,4 +1,4 @@
-package main
+package window
 
 import rl "vendor:raylib"
 
@@ -6,12 +6,14 @@ Window :: struct {
     width, height: i32,
 }
 
-create_window :: proc(width: i32, height: i32) -> Window {
+window : Window
+
+create:: proc(width: i32, height: i32) {
     rl.InitWindow(width, height, "game")
     rl.SetTargetFPS(60)
-    return Window{width, height}
+    window = Window{width, height}
 }
 
-close_window:: proc(window: ^Window) {
+close:: proc() {
     rl.CloseWindow();
 }
