@@ -34,7 +34,7 @@ draw :: proc() {
 
     top_state_table[top_state].draw()
     ui.begin()
-    ui.all_windows(ui.get_ctx())
+    //ui.all_windows(ui.get_ctx())
     ui.end()
     ui.render()
 }

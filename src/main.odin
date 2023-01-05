@@ -3,6 +3,7 @@ package main
 import rl "vendor:raylib"
 import "./ui"
 import "./state"
+import "./sys"
 import "core:fmt"
 
 main :: proc() {

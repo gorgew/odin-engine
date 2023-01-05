@@ -6,7 +6,6 @@ import "core:unicode/utf8"
 import rl "vendor:raylib"
 import mu "vendor:microui"
 
-
 @(private)
 state := struct {
 	mu_ctx: mu.Context,
@@ -23,34 +22,6 @@ state := struct {
 
 @(private) pixels : [][4]u8
 @(private) ctx : ^mu.Context
-
-@(private)
-set_pixel_alpha :: proc() {
-    pixels = make([][4]u8, mu.DEFAULT_ATLAS_WIDTH*mu.DEFAULT_ATLAS_HEIGHT)
-    for alpha, i in mu.default_atlas_alpha {
-		pixels[i] = {0xff, 0xff, 0xff, alpha}
-	}
-}
-
-@(private)
-load_mu_tex :: proc() {
-    image := rl.Image{
-		data = raw_data(pixels),
-		width   = mu.DEFAULT_ATLAS_WIDTH,
-		height  = mu.DEFAULT_ATLAS_HEIGHT,
-		mipmaps = 1,
-		format  = .UNCOMPRESSED_R8G8B8A8,
-	}
-	state.atlas_texture = rl.LoadTextureFromImage(image)
-}
-
-@(private)
-load_context :: proc() {
-    
-    mu.init(ctx)
-    ctx.text_width = mu.default_atlas_text_width
-	ctx.text_height = mu.default_atlas_text_height
-}
 
 load :: proc() {
     set_pixel_alpha()
@@ -73,9 +44,9 @@ end :: proc() {
     mu.end(ctx)
 }
 
-get_input :: proc() {
-    { // text input
-        text_input: [512]byte = ---
+@(private)
+text_input :: proc() {
+    text_input: [512]byte = ---
         text_input_offset := 0
         for text_input_offset < len(text_input) {
             ch := rl.GetCharPressed()
@@ -87,8 +58,10 @@ get_input :: proc() {
             text_input_offset += w
         }
         mu.input_text(ctx, string(text_input[:text_input_offset]))
-    }
+}
 
+@(private)
+mouse_input :: proc() {
     // mouse coordinates
     mouse_pos := [2]i32{rl.GetMouseX(), rl.GetMouseY()}
     mu.input_mouse_move(ctx, mouse_pos.x, mouse_pos.y)
@@ -111,29 +84,12 @@ get_input :: proc() {
         }
         
     }
-    
-    // keyboard
-    @static keys_to_check := [?]struct{
-        rl_key: rl.KeyboardKey,
-        mu_key: mu.Key,
-    }{
-        {.LEFT_SHIFT,    .SHIFT},
-        {.RIGHT_SHIFT,   .SHIFT},
-        {.LEFT_CONTROL,  .CTRL},
-        {.RIGHT_CONTROL, .CTRL},
-        {.LEFT_ALT,      .ALT},
-        {.RIGHT_ALT,     .ALT},
-        {.ENTER,         .RETURN},
-        {.KP_ENTER,      .RETURN},
-        {.BACKSPACE,     .BACKSPACE},
-    }
-    for key in keys_to_check {
-        if rl.IsKeyPressed(key.rl_key) {
-            mu.input_key_down(ctx, key.mu_key)
-        } else if rl.IsKeyReleased(key.rl_key) {
-            mu.input_key_up(ctx, key.mu_key)
-        }
-    }
+}
+
+get_input :: proc() {
+    text_input()
+    mouse_input()
+    keyboard_input()
 }
 
 get_ctx :: proc() -> ^mu.Context {
@@ -179,6 +135,60 @@ render :: proc() {
             rl.BeginScissorMode(cmd.rect.x, rl.GetScreenHeight() - (cmd.rect.y + cmd.rect.h), cmd.rect.w, cmd.rect.h)
         case ^mu.Command_Jump:
             unreachable()
+        }
+    }
+}
+
+@(private)
+set_pixel_alpha :: proc() {
+    pixels = make([][4]u8, mu.DEFAULT_ATLAS_WIDTH*mu.DEFAULT_ATLAS_HEIGHT)
+    for alpha, i in mu.default_atlas_alpha {
+		pixels[i] = {0xff, 0xff, 0xff, alpha}
+	}
+}
+
+@(private)
+load_mu_tex :: proc() {
+    image := rl.Image{
+		data = raw_data(pixels),
+		width   = mu.DEFAULT_ATLAS_WIDTH,
+		height  = mu.DEFAULT_ATLAS_HEIGHT,
+		mipmaps = 1,
+		format  = .UNCOMPRESSED_R8G8B8A8,
+	}
+	state.atlas_texture = rl.LoadTextureFromImage(image)
+}
+
+@(private)
+load_context :: proc() {
+    
+    mu.init(ctx)
+    ctx.text_width = mu.default_atlas_text_width
+	ctx.text_height = mu.default_atlas_text_height
+}
+
+@(private)
+keyboard_input :: proc() {
+    // keyboard
+    @static keys_to_check := [?]struct{
+        rl_key: rl.KeyboardKey,
+        mu_key: mu.Key,
+    }{
+        {.LEFT_SHIFT,    .SHIFT},
+        {.RIGHT_SHIFT,   .SHIFT},
+        {.LEFT_CONTROL,  .CTRL},
+        {.RIGHT_CONTROL, .CTRL},
+        {.LEFT_ALT,      .ALT},
+        {.RIGHT_ALT,     .ALT},
+        {.ENTER,         .RETURN},
+        {.KP_ENTER,      .RETURN},
+        {.BACKSPACE,     .BACKSPACE},
+    }
+    for key in keys_to_check {
+        if rl.IsKeyPressed(key.rl_key) {
+            mu.input_key_down(ctx, key.mu_key)
+        } else if rl.IsKeyReleased(key.rl_key) {
+            mu.input_key_up(ctx, key.mu_key)
         }
     }
 }
