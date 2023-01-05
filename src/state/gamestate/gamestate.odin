@@ -1,6 +1,7 @@
 package gamestate
 
 import rl "vendor:raylib"
+import mu "vendor:microui"
 import "core:fmt"
 import "core:strings"
 import "../"
@@ -12,9 +13,9 @@ GameState :: enum {
 }
 
 GameStateProc :: struct {
-    enter: proc(^GameState),
-    exit: proc(^GameState),
-    tick: proc(^GameState),
+    enter: proc(),
+    exit: proc(),
+    tick: proc(),
     draw: proc(),
     draw_ui: proc(),
 }
@@ -25,14 +26,14 @@ game_state_table := [len(GameState)]state.StateProc{}
 @(private)
 game_state := GameState.ExploreDungeon
 
-enter :: proc(state : ^state.State) {
+enter :: proc() {
     game_state = GameState.ExploreDungeon
-    game_state_table[game_state].enter(state)
+    game_state_table[game_state].enter()
 
     load_assets()
 }
 
-exit :: proc(^state.State) {
+exit :: proc() {
 
 }
 
@@ -40,21 +41,25 @@ draw :: proc() {
     game_state_table[game_state].draw()
 }
 
-tick :: proc(state : ^state.State) {
-    game_state_table[game_state].tick(state)
+draw_ui :: proc(ctx: ^mu.Context) {
+    
 }
 
-enterExploreDungeon :: proc(^state.State) {
+tick :: proc() {
+    game_state_table[game_state].tick()
+}
+
+enterExploreDungeon :: proc() {
 
 }
 
-exitExploreDungeon :: proc(^state.State) {
+exitExploreDungeon :: proc() {
 
 }
 
 pos := rl.Vector2{10, 10}
 
-tickExploreDungeon :: proc(^state.State) {
+tickExploreDungeon :: proc() {
     animation.tick(&anim.animation)
 }
 
@@ -67,10 +72,14 @@ drawExploreDungeon :: proc() {
     //rl.DrawTexturePro()
 }
 
-init :: proc() {
-    state.top_state_table[state.State.Game] = {enter, exit, tick, draw}
+drawUIExploreDungeon :: proc(ctx: ^mu.Context) {
 
-    game_state_table[GameState.ExploreDungeon] = {enterExploreDungeon, exitExploreDungeon, tickExploreDungeon, drawExploreDungeon}
+}
+
+init :: proc() {
+    state.top_state_table[state.State.Game] = {enter, exit, tick, draw, draw_ui}
+
+    game_state_table[GameState.ExploreDungeon] = {enterExploreDungeon, exitExploreDungeon, tickExploreDungeon, drawExploreDungeon, drawUIExploreDungeon}
 }
 
 @(private)
