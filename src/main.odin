@@ -14,6 +14,7 @@ main :: proc() {
     for !rl.WindowShouldClose()
     {
         ui.get_input()
+        state.tick()
         state.draw()
     }
 }

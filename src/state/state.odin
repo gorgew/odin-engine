@@ -11,6 +11,7 @@ State :: enum {
 StateProc :: struct {
     enter: proc(^State),
     exit: proc(^State),
+    tick: proc(^State),
     draw: proc(),
 }
 
@@ -24,6 +25,10 @@ top_state := State.Game
 
 init :: proc() {
     top_state_table[top_state].enter(&top_state)
+}
+
+tick :: proc() {
+    top_state_table[top_state].tick(&top_state)
 }
 
 draw :: proc() {

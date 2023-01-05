@@ -14,8 +14,9 @@ GameState :: enum {
 GameStateProc :: struct {
     enter: proc(^GameState),
     exit: proc(^GameState),
+    tick: proc(^GameState),
     draw: proc(),
-    add_ui: proc(),
+    draw_ui: proc(),
 }
 
 @(private)
@@ -39,6 +40,10 @@ draw :: proc() {
     game_state_table[game_state].draw()
 }
 
+tick :: proc(state : ^state.State) {
+    game_state_table[game_state].tick(state)
+}
+
 enterExploreDungeon :: proc(^state.State) {
 
 }
@@ -49,10 +54,11 @@ exitExploreDungeon :: proc(^state.State) {
 
 pos := rl.Vector2{10, 10}
 
-drawExploreDungeon :: proc() {
-
+tickExploreDungeon :: proc(^state.State) {
     animation.tick(&anim.animation)
+}
 
+drawExploreDungeon :: proc() {
     //rl.ClearBackground(rl.RAYWHITE)
     rl.DrawText("Congrats! You created your first window!", 190, 200, 20, rl.LIGHTGRAY)
     rl.DrawCircleV(pos, 20.0, rl.MAGENTA)
@@ -62,9 +68,9 @@ drawExploreDungeon :: proc() {
 }
 
 init :: proc() {
-    state.top_state_table[state.State.Game] = {enter, exit, draw}
+    state.top_state_table[state.State.Game] = {enter, exit, tick, draw}
 
-    game_state_table[GameState.ExploreDungeon] = {enterExploreDungeon, exitExploreDungeon, drawExploreDungeon}
+    game_state_table[GameState.ExploreDungeon] = {enterExploreDungeon, exitExploreDungeon, tickExploreDungeon, drawExploreDungeon}
 }
 
 @(private)
@@ -101,7 +107,7 @@ animations := make(animation.Animation_Map)
 
 @(private)
 add_animations :: proc() {
-    animation.add_from_spritesheet(&animations, "gabe_run", &textures[texture.gabe_run], .5, 1, 7, 24, 24, 7, 0.0, 0.0, true)
+    animation.add_from_spritesheet(&animations, "gabe_run", &textures[texture.gabe_run], .125, 1, 7, 24, 24, 7, 0.0, 0.0, true)
 }
 
 anim: animation.Box
