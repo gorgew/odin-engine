@@ -1,8 +1,8 @@
 package main
 
 import rl "vendor:raylib"
-import "./ui"
-import "./state"
+import "lib:ui"
+import "lib:state"
 import "./sys"
 import "core:fmt"
 

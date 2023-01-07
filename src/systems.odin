@@ -1,9 +1,9 @@
 package main
 
 import "./config"
-import "./ui"
-import "./window"
-import "./state"
+import "lib:ui"
+import "lib:window"
+import "lib:state"
 import "./state/gamestate"
 import "./state/menu"
 

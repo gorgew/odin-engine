@@ -2,8 +2,8 @@ package menu
 
 import rl "vendor:raylib"
 import mu "lib:microui"
-import "../"
-import "../../ui"
+import "lib:state"
+import "lib:ui"
 import "../../config"
 
 enter :: proc() {
@@ -19,8 +19,8 @@ draw :: proc() {
 }
 
 draw_ui :: proc(ctx: ^mu.Context) {
-    ui.all_windows(ctx)
-    //draw_menu( ctx)
+    //ui.all_windows(ctx)
+    draw_menu( ctx)
 }
 
 

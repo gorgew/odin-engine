@@ -4,8 +4,8 @@ import rl "vendor:raylib"
 import mu "lib:microui"
 import "core:fmt"
 import "core:strings"
-import "../"
-import "../../animation"
+import "lib:state"
+import "lib:animation"
 
 GameState :: enum {
     ExploreDungeon,
