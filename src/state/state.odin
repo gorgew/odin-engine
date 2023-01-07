@@ -1,6 +1,6 @@
 package state
 import rl "vendor:raylib"
-import mu "vendor:microui"
+import mu "lib:microui"
 import ui "../ui"
 
 State :: enum {

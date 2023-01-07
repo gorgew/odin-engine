@@ -4,7 +4,7 @@ package microui_raylib
 import "core:fmt"
 import "core:unicode/utf8"
 import rl "vendor:raylib"
-import mu "vendor:microui"
+import mu "lib:microui"
 
 state := struct {
 	mu_ctx: mu.Context,

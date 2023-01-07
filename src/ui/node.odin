@@ -1,7 +1,7 @@
 package ui
 
 import rl "vendor:raylib"
-import mu "vendor:microui"
+import mu "lib:microui"
 
 Node :: struct {
     x, y: i32,

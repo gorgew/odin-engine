@@ -3,6 +3,10 @@
         {
             "name": "core",
             "path": "/Users/georgewang/Odin/core"
+        },
+        {
+            "name": "lib",
+            "path": "./lib"
         }
     ],
     "enable_document_symbols": true,

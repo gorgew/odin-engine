@@ -1,6 +1,6 @@
 package ui
 import "core:fmt"
-import mu "vendor:microui"
+import mu "lib:microui"
 
 u8_slider :: proc(ctx: ^mu.Context, val: ^u8, lo, hi: u8) -> (res: mu.Result_Set) {
 	mu.push_id(ctx, uintptr(val))

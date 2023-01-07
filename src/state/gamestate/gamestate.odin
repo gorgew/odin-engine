@@ -1,7 +1,7 @@
 package gamestate
 
 import rl "vendor:raylib"
-import mu "vendor:microui"
+import mu "lib:microui"
 import "core:fmt"
 import "core:strings"
 import "../"

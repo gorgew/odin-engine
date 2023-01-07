@@ -4,7 +4,7 @@ package ui
 import "core:fmt"
 import "core:unicode/utf8"
 import rl "vendor:raylib"
-import mu "vendor:microui"
+import mu "lib:microui"
 
 @(private)
 state := struct {
