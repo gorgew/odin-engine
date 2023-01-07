@@ -32,13 +32,10 @@ init :: proc() {
     state.top_state_table[state.State.Menu] = {enter, exit, tick, draw, draw_ui}
 }
 
-@(private) width: i32 = 300
-@(private) height: i32 = 450
-
 @(private)
 draw_menu :: proc(ctx: ^mu.Context) {
-    @static opts := mu.Options{.NO_CLOSE,}
-    if mu.window(ctx, "Demo Window", {config.screenWidth / 2 - width / 2, 100, width, height}, opts) {
+    @static opts := mu.Options{.NO_CLOSE, .NO_RESIZE}
+    if mu.window(ctx, "Demo Window", ui.center(ui.from_node(ui.TopLeftCornerNode(), ui.BottomMidpointNode()), ui.CentralNode()), opts) {
         mu.layout_row(ctx, {86, -110, -1})
         mu.label(ctx, "New Game:")
         if .SUBMIT in mu.button(ctx, "New Game") { state.transition(state.State.Game)  }
