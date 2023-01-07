@@ -130,6 +130,7 @@ Command_Variant :: union {
 	^Command_Rect,
 	^Command_Text,
 	^Command_Icon,
+	^Command_Image,
 }
 Command :: struct { 
 	variant: Command_Variant,
@@ -160,6 +161,11 @@ Command_Icon :: struct {
 	rect:  Rect, 
 	id:    Icon, 
 	color: Color,
+}
+Command_Image :: struct {
+	using command: Command,
+	rect:  Rect,
+	texture: rawptr,
 }
 
 

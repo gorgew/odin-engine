@@ -97,11 +97,19 @@ get_ctx :: proc() -> ^mu.Context {
 }
 
 render :: proc() {
-    render_texture :: proc(rect: mu.Rect, pos: [2]i32, color: mu.Color) {
+    render_mu_texture :: proc(rect: mu.Rect, pos: [2]i32, color: mu.Color) {
         source := rl.Rectangle{f32(rect.x), f32(rect.y), f32(rect.w), f32(rect.h)}
         position := rl.Vector2{f32(pos.x), f32(pos.y)}
 
         rl.DrawTextureRec(state.atlas_texture, source, position, transmute(rl.Color)color)
+    }
+
+    render_rl_texture :: proc(texture: rawptr, rect: mu.Rect) {
+        text_ptr := cast(^rl.Texture2D) texture
+        source := rl.Rectangle{0.0, 0.0, f32(text_ptr.width), f32(text_ptr.height)}
+        dest := rl.Rectangle{f32(rect.x), f32(rect.y), f32(rect.w), f32(rect.h)}
+
+        rl.DrawTexturePro(text_ptr^, source, dest, rl.Vector2{0.0, 0.0}, 0.0, rl.WHITE)
     }
 
     //rl.ClearBackground(transmute(rl.Color)state.bg)
@@ -114,7 +122,7 @@ render :: proc() {
             for ch in cmd.str do if ch & 0xc0 != 0x80 {
                     r := min(int(ch), 127)
                     rect := mu.default_atlas[mu.DEFAULT_ATLAS_FONT + r]
-                    render_texture(rect, pos, cmd.color)
+                    render_mu_texture(rect, pos, cmd.color)
                     pos.x += rect.w
                 }
         case ^mu.Command_Rect:
@@ -129,12 +137,15 @@ render :: proc() {
             rect := mu.default_atlas[cmd.id]
             x := cmd.rect.x + (cmd.rect.w - rect.w) / 2
             y := cmd.rect.y + (cmd.rect.h - rect.h) / 2
-            render_texture(rect, {x, y}, cmd.color)
+            render_mu_texture(rect, {x, y}, cmd.color)
         case ^mu.Command_Clip:
             rl.EndScissorMode()
             rl.BeginScissorMode(cmd.rect.x, rl.GetScreenHeight() - (cmd.rect.y + cmd.rect.h), cmd.rect.w, cmd.rect.h)
         case ^mu.Command_Jump:
             unreachable()
+        //Custom commands
+        case ^mu.Command_Image:
+            render_rl_texture(cmd.texture, cmd.rect)
         }
     }
 }
