@@ -42,7 +42,7 @@ draw_menu :: proc(ctx: ^mu.Context) {
         mu.label(ctx, "New Game:")
         if .SUBMIT in mu.button(ctx, "New Game") { state.transition(state.State.Game)  }
 
-        mu.layout_row(ctx, {-1}, 100)
+        mu.layout_height_relative(ctx, {-1}, 0.3)
         mu.image(ctx, &textures[texture.gabe_run], opts)
     }
     
