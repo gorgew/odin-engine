@@ -23,7 +23,8 @@ draw_image :: proc(ctx: ^Context, texture: rawptr, rect: Rect) {
 	/* do icon command */
 	cmd := push_command(ctx, Command_Image)
 	cmd.texture = texture
-	cmd.rect = rect
+	cmd.src = Rect{-1, -1, -1, -1}
+	cmd.dest = rect
 	/* reset clipping if it was set */
 	if clipped != .NONE {
 		set_clip(ctx, unclipped_rect)

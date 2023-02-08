@@ -164,7 +164,7 @@ Command_Icon :: struct {
 }
 Command_Image :: struct {
 	using command: Command,
-	rect:  Rect,
+	src, dest:  Rect,
 	texture: rawptr,
 }
 

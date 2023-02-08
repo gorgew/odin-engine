@@ -5,6 +5,7 @@ import "core:fmt"
 import "core:unicode/utf8"
 import rl "vendor:raylib"
 import mu "lib:microui"
+import "lib:util"
 
 @(private)
 state := struct {
@@ -96,6 +97,7 @@ get_ctx :: proc() -> ^mu.Context {
     return ctx
 }
 
+
 render :: proc() {
     render_mu_texture :: proc(rect: mu.Rect, pos: [2]i32, color: mu.Color) {
         source := rl.Rectangle{f32(rect.x), f32(rect.y), f32(rect.w), f32(rect.h)}
@@ -104,12 +106,19 @@ render :: proc() {
         rl.DrawTextureRec(state.atlas_texture, source, position, transmute(rl.Color)color)
     }
 
-    render_rl_texture :: proc(texture: rawptr, rect: mu.Rect) {
-        text_ptr := cast(^rl.Texture2D) texture
-        source := rl.Rectangle{0.0, 0.0, f32(text_ptr.width), f32(text_ptr.height)}
-        dest := rl.Rectangle{f32(rect.x), f32(rect.y), f32(rect.w), f32(rect.h)}
+    validate_src :: proc(texture: rawptr, src: mu.Rect) -> mu.Rect {
+        if src.w < 0 && src.h < 0 && src.x < 0 && src.y < 0 {
+            text_ptr := cast(^rl.Texture2D) texture
+            return mu.Rect{0, 0, text_ptr.width, text_ptr.height}
+        }
+        return src
+    }
 
-        rl.DrawTexturePro(text_ptr^, source, dest, rl.Vector2{0.0, 0.0}, 0.0, rl.WHITE)
+    render_rl_texture :: proc(texture: rawptr, src, dest: mu.Rect) {
+        text_ptr := cast(^rl.Texture2D) texture
+        src :=  util.mu_rect_to_rl(validate_src(texture, src))
+        dest := util.mu_rect_to_rl(dest)
+        rl.DrawTexturePro(text_ptr^, src, dest, rl.Vector2{0.0, 0.0}, 0.0, rl.WHITE)
     }
 
     //rl.ClearBackground(transmute(rl.Color)state.bg)
@@ -145,7 +154,7 @@ render :: proc() {
             unreachable()
         //Custom commands
         case ^mu.Command_Image:
-            render_rl_texture(cmd.texture, cmd.rect)
+            render_rl_texture(cmd.texture, cmd.src, cmd.dest)
         }
     }
 }

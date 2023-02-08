@@ -1,7 +1,7 @@
 package animation
 
 import rl "vendor:raylib"
-import "../util"
+import "lib:util"
 
 /*
 For 2d animations
