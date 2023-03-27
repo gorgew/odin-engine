@@ -17,18 +17,32 @@ Frame :: struct {
 Animation :: struct {
     texture: ^rl.Texture2D,
     frames: []Frame,
-    index: int,
     timer: util.Timer,
     loop: bool,
+    
+}
+
+AnimObj :: struct {
+    anim: ^Animation,
+    timer: util.Timer,
+    output: rl.Rectangle,
+    index: int,
     done: bool,
 }
 
-Box :: struct {
-    animation: Animation,
-    output: rl.Rectangle,
-}
-
 Animation_Map :: map[string]Animation
+
+get :: proc(name: string, anim_map: Animation_Map, output:= rl.Rectangle{0, 0, 100, 100}) -> AnimObj {
+    assert(name in anim_map)
+    anim := &anim_map[name]
+    return AnimObj{
+        anim,
+        util.Timer{anim.frames[0].time},
+        output,
+        0,
+        false,
+    }
+}
 
 add :: proc(anim_map: ^Animation_Map, anim_name: string, 
     texture: ^rl.Texture2D, frames: []Frame, loop := false) {
@@ -37,7 +51,7 @@ add :: proc(anim_map: ^Animation_Map, anim_name: string,
     assert(texture != nil)
     assert(frames != nil)
 
-    anim_map[anim_name] = Animation{texture, frames, 0, util.Timer{frames[0].time}, loop, false}
+    anim_map[anim_name] = Animation{texture, frames, util.Timer{frames[0].time}, loop}
 }
 
 add_from_spritesheet :: proc(anim_map: ^Animation_Map, anim_name: string, 
@@ -64,38 +78,34 @@ check_next_row :: proc(texture: ^rl.Texture2D, columns: int, offset: ^rl.Vector2
     }
 }
 
-draw :: proc(animation: ^Animation, output_box: rl.Rectangle) {
-    source := animation.frames[animation.index].texcoords
-    rl.DrawTexturePro(animation.texture^, source, output_box, rl.Vector2{0, 0}, 0.0, rl.WHITE)
+draw_box :: proc(anim: ^AnimObj) {
+    source := anim.anim.frames[anim.index].texcoords
+    rl.DrawTexturePro(anim.anim.texture^, source, anim.output, rl.Vector2{0, 0}, 0.0, rl.WHITE)
 }
 
-draw_box :: proc(box: ^Box) {
-    draw(&box.animation, box.output)
-}
-
-tick :: proc(animation: ^Animation) {
-    if animation.done {
+tick :: proc(anim: ^AnimObj) {
+    if anim.done {
         return;
     }
 
-    util.tick(&animation.timer)
-    if util.is_done(&animation.timer) {
-        animation.index = animation.index + 1
-        animation.timer.time = animation.frames[animation.index].time
-        check_done(animation)
+    util.tick(&anim.timer)
+    if util.is_done(&anim.timer) {
+        anim.index = anim.index + 1
+        anim.timer.time = anim.anim.frames[anim.index].time
+        check_done(anim)
     }
 }
 
 @(private)
-check_done :: proc(animation: ^Animation) {
-    if animation.index != len(animation.frames) - 1{
+check_done :: proc(anim: ^AnimObj) {
+    if anim.index != len(anim.anim.frames) - 1{
         return
     }
     
-    if animation.loop {
-        animation.index = 0
+    if anim.anim.loop {
+        anim.index = 0
     }
     else {
-        animation.done = true
+        anim.done = true
     }
 }

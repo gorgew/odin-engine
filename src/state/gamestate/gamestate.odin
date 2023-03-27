@@ -60,7 +60,7 @@ exitExploreDungeon :: proc() {
 pos := rl.Vector2{10, 10}
 
 tickExploreDungeon :: proc() {
-    animation.tick(&anim.animation)
+    animation.tick(&anim)
 }
 
 drawExploreDungeon :: proc() {
@@ -119,9 +119,9 @@ add_animations :: proc() {
     animation.add_from_spritesheet(&animations, "gabe_run", &textures[texture.gabe_run], .125, 1, 7, 24, 24, 7, 0.0, 0.0, true)
 }
 
-anim: animation.Box
+anim: animation.AnimObj
 
 @(private)
 init_game_objects :: proc() {
-    anim = animation.Box{animations["gabe_run"], rl.Rectangle{10, 10, 100, 100}}
+    anim = animation.get("gabe_run", animations, rl.Rectangle{10, 10, 100, 100})
 }
