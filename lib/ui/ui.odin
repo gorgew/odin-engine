@@ -116,8 +116,8 @@ render :: proc() {
 
     render_rl_texture :: proc(texture: rawptr, src, dest: mu.Rect) {
         text_ptr := cast(^rl.Texture2D) texture
-        src :=  util.mu_rect_to_rl(validate_src(texture, src))
-        dest := util.mu_rect_to_rl(dest)
+        src :=  mu.mu_rect_to_rl(validate_src(texture, src))
+        dest := mu.mu_rect_to_rl(dest)
         rl.DrawTexturePro(text_ptr^, src, dest, rl.Vector2{0.0, 0.0}, 0.0, rl.WHITE)
     }
 

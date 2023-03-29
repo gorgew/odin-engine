@@ -7,6 +7,7 @@ import "core:strings"
 import "lib:state"
 import "lib:ui"
 import "../../config"
+import "lib:animation"
 
 enter :: proc() {
     load_assets()
@@ -36,14 +37,17 @@ init :: proc() {
 
 @(private)
 draw_menu :: proc(ctx: ^mu.Context) {
-    @static opts := mu.Options{.NO_CLOSE, .NO_RESIZE}
+    @static opts := mu.Options{.NO_CLOSE}
+    //@static opts := mu.Options{.NO_CLOSE, .NO_RESIZE}
     if mu.window(ctx, "Demo Window", ui.center(ui.from_node(ui.TopLeftCornerNode(), ui.BottomMidpointNode()), ui.CentralNode()), opts) {
         mu.layout_row(ctx, {86, -110, -1})
         mu.label(ctx, "New Game:")
         if .SUBMIT in mu.button(ctx, "New Game") { state.transition(state.State.Game)  }
 
-        mu.layout_height_relative(ctx, {-1}, 0.3)
+        mu.layout_height_relative(ctx, {-1}, 0.1)
         mu.image(ctx, &textures[texture.gabe_run], opts)
+        mu.layout_height_relative(ctx, {-1}, 0.1)
+        mu.animation(ctx, &anim, opts)
     }
     
 }
@@ -58,6 +62,8 @@ texture :: enum {
 @(private)
 load_assets :: proc() {
     load_textures()
+    add_animations()
+    init_game_objects()
 }
 
 @(private)
@@ -73,4 +79,19 @@ load_textures :: proc() {
 @(private)
 get_path :: proc(args: ..any) -> string {
     return fmt.aprint(args=args, sep="")
+}
+
+@(private)
+animations := make(animation.Animation_Map)
+
+@(private)
+add_animations :: proc() {
+    animation.add_from_spritesheet(&animations, "gabe_run", &textures[texture.gabe_run], .125, 1, 7, 24, 24, 7, 0.0, 0.0, true)
+}
+
+anim: animation.AnimObj
+
+@(private)
+init_game_objects :: proc() {
+    anim = animation.get("gabe_run", animations, rl.Rectangle{10, 10, 100, 100})
 }

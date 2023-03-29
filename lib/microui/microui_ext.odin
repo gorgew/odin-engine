@@ -1,4 +1,5 @@
 package microui
+import "lib:animation"
 
 image :: proc(ctx: ^Context, texture: rawptr, opt: Options = {.ALIGN_CENTER}) -> (res: Result_Set) {
 	id := get_id(ctx, uintptr(texture))
@@ -6,15 +7,30 @@ image :: proc(ctx: ^Context, texture: rawptr, opt: Options = {.ALIGN_CENTER}) ->
 	/* draw */
 	//draw_control_frame(ctx, id, r, .BUTTON, opt)
 	if texture != nil {
-		
+		draw_image(ctx, texture, Rect{-1, -1, -1, -1}, r)
 	}
-    draw_image(ctx, texture, r)
+    
 	return
 }
 
-draw_image :: proc(ctx: ^Context, texture: rawptr, rect: Rect) {
+animation :: proc(ctx: ^Context, anim: ^animation.AnimObj , opt: Options = {.ALIGN_CENTER}) -> (res: Result_Set) {
+	animation.tick(anim)
+	
+	id := get_id(ctx, uintptr(anim.anim.texture))
+	r := layout_next(ctx)
+	/* draw */
+	//draw_control_frame(ctx, id, r, .BUTTON, opt)
+	if anim.anim.texture != nil {
+		draw_image(ctx, anim.anim.texture, rl_rect_to_mu(anim.anim.frames[anim.index].texcoords), r)
+	}
+	
+    
+	return
+}
+
+draw_image :: proc(ctx: ^Context, texture: rawptr, src: Rect, dest: Rect) {
 	/* do clip command if the rect isn't fully contained within the cliprect */
-	clipped := check_clip(ctx, rect)
+	clipped := check_clip(ctx, dest)
 	switch clipped {
 	case .NONE: // okay
 	case .ALL:  return
@@ -23,8 +39,8 @@ draw_image :: proc(ctx: ^Context, texture: rawptr, rect: Rect) {
 	/* do icon command */
 	cmd := push_command(ctx, Command_Image)
 	cmd.texture = texture
-	cmd.src = Rect{-1, -1, -1, -1}
-	cmd.dest = rect
+	cmd.src = src
+	cmd.dest = dest
 	/* reset clipping if it was set */
 	if clipped != .NONE {
 		set_clip(ctx, unclipped_rect)
