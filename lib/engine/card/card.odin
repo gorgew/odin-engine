@@ -1,4 +1,4 @@
-package gamestate
+package card
 
 import "core:sort"
 import "core:math/rand"

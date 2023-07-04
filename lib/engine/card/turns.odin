@@ -1,4 +1,4 @@
-package gamestate
+package card
 
 @(private)
 currentPlayer: ^Player

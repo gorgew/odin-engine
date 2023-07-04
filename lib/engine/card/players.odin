@@ -1,4 +1,4 @@
-package gamestate
+package card
 
 Player :: struct {
     deck: [dynamic] Cardboard,

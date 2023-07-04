@@ -1,4 +1,4 @@
-package gamestate
+package card
 
 card_map := make(map[string]Card)
 
