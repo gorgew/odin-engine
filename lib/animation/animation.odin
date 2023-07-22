@@ -8,7 +8,6 @@ For 2d animations
 
 */
 
-
 Frame :: struct {   
     time: f32,
     texcoords: rl.Rectangle,
