@@ -4,6 +4,7 @@ import mu "lib:microui"
 import "core:intrinsics"
 import "core:reflect"
 
+@private
 type_is_struct_of_proc :: proc($T: typeid) -> bool 
     where intrinsics.type_is_struct(T) {
     for type in reflect.struct_field_types(T) {

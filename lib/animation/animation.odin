@@ -19,7 +19,6 @@ Animation :: struct {
     frames: []Frame,
     timer: util.Timer,
     loop: bool,
-    
 }
 
 AnimObj :: struct {

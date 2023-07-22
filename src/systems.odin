@@ -20,7 +20,6 @@ close_systems :: proc() {
     ui.close()
 }
 
-@(private)
 load_states :: proc() {
     menu.init()
     gamestate.init()

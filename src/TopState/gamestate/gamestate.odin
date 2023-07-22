@@ -22,7 +22,7 @@ GameStateProc :: struct {
 }
 
 @(private)
-game_state_table := [len(GameState)]state.StateProc{}
+game_state_table := state.get(GameState, state.StateProc)
 
 @(private)
 game_state := GameState.ExploreDungeon
@@ -49,33 +49,6 @@ draw_ui :: proc(ctx: ^mu.Context) {
 
 tick :: proc() {
     game_state_table[game_state].tick()
-}
-
-enterExploreDungeon :: proc() {
-
-}
-
-exitExploreDungeon :: proc() {
-
-}
-
-pos := rl.Vector2{10, 10}
-
-tickExploreDungeon :: proc() {
-    animation.tick(&anim)
-}
-
-drawExploreDungeon :: proc() {
-    //rl.ClearBackground(rl.RAYWHITE)
-    rl.DrawText("Congrats! You created your first window!", 190, 200, 20, rl.LIGHTGRAY)
-    rl.DrawCircleV(pos, 20.0, rl.MAGENTA)
-    animation.draw_box(&anim)
-    rl.DrawTexture(textures[texture.gabe_run], 150, 400, rl.WHITE);
-    //rl.DrawTexturePro()
-}
-
-drawUIExploreDungeon :: proc(ctx: ^mu.Context) {
-
 }
 
 init :: proc() {
@@ -130,8 +103,4 @@ init_game_objects :: proc() {
 
 init_game :: proc() {
 
-    // Card game
-    /*
-    
-    */
 }
