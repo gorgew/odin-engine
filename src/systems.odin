@@ -4,14 +4,15 @@ import "./config"
 import "lib:ui"
 import "lib:window"
 import "lib:state"
-import "./state/gamestate"
-import "./state/menu"
+import "./topstate/gamestate"
+import "./topstate/menu"
+import "./topstate"
 
 load_systems :: proc() {
     window.create(config.screenWidth, config.screenHeight)
     ui.load()
     load_states()
-    state.init()
+    TopState.init_state()
 }
 
 close_systems :: proc() {

@@ -2,8 +2,8 @@ package main
 
 import rl "vendor:raylib"
 import "lib:ui"
-import "lib:state"
 import "./sys"
+import "./topstate"
 import "core:fmt"
 
 main :: proc() {
@@ -14,7 +14,7 @@ main :: proc() {
     for !rl.WindowShouldClose()
     {
         ui.get_input()
-        state.tick()
-        state.draw()
+        TopState.tick()
+        TopState.draw()
     }
 }
