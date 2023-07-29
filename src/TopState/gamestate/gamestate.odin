@@ -29,7 +29,7 @@ game_state_table := state.get(GameState, state.StateProc)
 game_state := GameState.ExploreDungeon
 
 enter :: proc() {
-    game_state = GameState.ExploreDungeon
+    game_state = GameState.Combat
     game_state_table[game_state].enter()
 
     init_game_objects()
@@ -41,11 +41,11 @@ exit :: proc() {
 }
 
 draw :: proc() {
-    game_state_table[game_state].draw()
+    //game_state_table[game_state].draw()
 }
 
 draw_ui :: proc(ctx: ^mu.Context) {
-    
+    game_state_table[game_state].draw_ui(ctx)
 }
 
 tick :: proc() {
@@ -56,6 +56,7 @@ init :: proc() {
     state.get(TopState.State, state.StateProc)[TopState.State.Game] = {enter, exit, tick, draw, draw_ui}
 
     game_state_table[GameState.ExploreDungeon] = {enterExploreDungeon, exitExploreDungeon, tickExploreDungeon, drawExploreDungeon, drawUIExploreDungeon}
+    game_state_table[GameState.Combat] = {enterCombat, exitCombat, tickCombat, drawCombat, drawUICombat}
 }
 
 anim: animation.AnimObj

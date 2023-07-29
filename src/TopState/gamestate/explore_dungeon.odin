@@ -27,7 +27,7 @@ drawExploreDungeon :: proc() {
     pos := rl.Vector2{10, 10}
     rl.DrawCircleV(pos, 20.0, rl.MAGENTA)
     animation.draw_box(&anim)
-    rl.DrawTexture(textures[texture.gabe_run], 150, 400, rl.WHITE);
+    //rl.DrawTexture(textures[texture.gabe_run], 150, 400, rl.WHITE);
     //rl.DrawTexturePro()
 }
 

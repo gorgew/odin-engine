@@ -39,9 +39,12 @@ init :: proc() {
 
 @(private)
 draw_menu :: proc(ctx: ^mu.Context) {
-    @static opts := mu.Options{.NO_CLOSE}
+    @static opts := mu.Options{.NO_CLOSE, .NO_RESIZE}
     //@static opts := mu.Options{.NO_CLOSE, .NO_RESIZE}
-    if mu.window(ctx, "Demo Window", ui.center(ui.from_node(ui.TopLeftCornerNode(), ui.BottomMidpointNode()), ui.CentralNode()), opts) {
+    if mu.window(ctx, "Demo Window", 
+        
+            ui.from_node(ui.TopLeftCornerNode(), ui.BottomMidpointNode()), 
+        opts) {
         mu.layout_row(ctx, {86, -110, -1})
         mu.label(ctx, "New Game:")
         if .SUBMIT in mu.button(ctx, "New Game") { TopState.transition(TopState.State.Game)  }

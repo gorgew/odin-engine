@@ -1,4 +1,4 @@
 package config
 
-screenWidth :i32 = 800;
-screenHeight :i32 = 600;
+screenWidth :i32 = 1280;
+screenHeight :i32 = 720;
