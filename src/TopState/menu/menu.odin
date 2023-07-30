@@ -7,6 +7,7 @@ import "core:strings"
 import "lib:assets"
 import "lib:state"
 import "lib:ui"
+import "lib:ui/node"
 import "../../config"
 import "lib:animation"
 import "../"
@@ -42,8 +43,7 @@ draw_menu :: proc(ctx: ^mu.Context) {
     @static opts := mu.Options{.NO_CLOSE, .NO_RESIZE}
     //@static opts := mu.Options{.NO_CLOSE, .NO_RESIZE}
     if mu.window(ctx, "Demo Window", 
-        
-            ui.from_node(ui.TopLeftCornerNode(), ui.BottomMidpointNode()), 
+            node.to_rect_aspect(node.center(node.TopLeftCornerNode(), node.BottomMidpointNode(), node.CentralNode()), node.SIXTEEN_BY_NINE),
         opts) {
         mu.layout_row(ctx, {86, -110, -1})
         mu.label(ctx, "New Game:")

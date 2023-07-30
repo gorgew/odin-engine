@@ -16,7 +16,7 @@ top_state_table := state.get(State, state.StateProc)
 
 //Top level state
 @(private)
-top_state := State.Menu
+top_state := State.Game
 
 init_state :: proc() {
     top_state_table[top_state].enter()

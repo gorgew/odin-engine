@@ -29,6 +29,7 @@ load :: proc() {
     load_mu_tex()
 
     ctx = &state.mu_ctx
+    ctx._style.colors[mu.Color_Type.WINDOW_BG] = mu.Color{100, 200, 200, 127}
     load_context()
 }
 

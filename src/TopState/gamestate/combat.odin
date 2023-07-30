@@ -7,6 +7,7 @@ import "lib:animation"
 import "lib:state"
 import "core:fmt"
 import "lib:ui"
+import "lib:ui/demo"
 
 CombatState :: enum {
     NewTurn,
@@ -69,5 +70,5 @@ drawCombat :: proc() {
 }
 
 drawUICombat :: proc(ctx: ^mu.Context) {
-    ui.all_windows(ctx)
+    demo.draw_menu(ctx)
 }
